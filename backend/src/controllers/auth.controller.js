@@ -1,19 +1,52 @@
+// /**
+//  * Handles the login logic
+//  * POST /api/login
+//  */
+// export const login = (req, res, next) => {
+//     try {
+//         const { username, password } = req.body;
+
+//         // 1. Validation: Return 400 Bad Request if fields are missing
+//         if (!username || !password) {
+//             return res.status(400).json({
+//                 message: "Username and password are required."
+//             });
+//         }
+
+//         // 2. Credential Check: Strictly admin / admin
+//         if (username === 'admin' && password === 'admin') {
+//             return res.status(200).json({
+//                 message: "Login successful",
+//                 username: "admin"
+//             });
+//         }
+
+//         // 3. Unauthorized: Invalid credentials
+//         return res.status(401).json({
+//             message: "Invalid username or password."
+//         });
+
+//     } catch (error) {
+//         // Pass unexpected errors to the global error handler
+//         next(error);
+//     }
+// };
+
 /**
- * Handles the login logic
- * POST /api/login
+ * Business logic for Login Validation
  */
 export const login = (req, res, next) => {
     try {
         const { username, password } = req.body;
 
-        // 1. Validation: Return 400 Bad Request if fields are missing
+        // 1. Validation: Check for missing fields
         if (!username || !password) {
             return res.status(400).json({
-                message: "Username and password are required."
+                message: "Bad Request: Username and password are required."
             });
         }
 
-        // 2. Credential Check: Strictly admin / admin
+        // 2. Credential Check: admin/admin
         if (username === 'admin' && password === 'admin') {
             return res.status(200).json({
                 message: "Login successful",
@@ -21,13 +54,13 @@ export const login = (req, res, next) => {
             });
         }
 
-        // 3. Unauthorized: Invalid credentials
+        // 3. Unauthorized: Incorrect credentials
         return res.status(401).json({
-            message: "Invalid username or password."
+            message: "Unauthorized: Invalid username or password."
         });
 
     } catch (error) {
-        // Pass unexpected errors to the global error handler
+        // Pass unexpected errors to the global error middleware
         next(error);
     }
 };
