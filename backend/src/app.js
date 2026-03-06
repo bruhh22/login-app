@@ -39,9 +39,20 @@ if (config.NODE_ENV === 'development') {
     app.use(morgan('combined'));
 }
 
+const allowedOrigins = [
+    "http://localhost:3000",
+    config.FRONTEND_URL
+];
+
 // 3. Dynamic CORS Configuration
 app.use(cors({
-    origin: config.FRONTEND_URL,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     methods: ['GET', 'POST'],
     credentials: true
 }));
